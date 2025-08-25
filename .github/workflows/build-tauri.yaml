@@ -60,5 +60,5 @@ jobs:
         with:
           name: prompt-db
           path: |
-            prompt-db/src-tauri/target/release/bundle/
-            prompt-db/src-tauri/target/release/*.exe
+            src-tauri/target/**/release/bundle/
+            src-tauri/target/**/release/*.exe
