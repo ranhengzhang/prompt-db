@@ -21,15 +21,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4.0.0
+        with:
+          version: latest # specify the pnpm version you want to use.
+
       - name: setup node
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'pnpm' # change this to npm, pnpm or yarn depending on which one you use.
-
-      - uses: pnpm/action-setup@v4.0.0
-        with:
-          version: latest # specify the pnpm version you want to use.
 
       - name: install pnpm
         run: pnpm i # change this to npm, pnpm or yarn depending on which one you use.
