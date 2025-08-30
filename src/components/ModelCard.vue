@@ -27,18 +27,18 @@ const type_badges = [
 </script>
 
 <template>
-  <el-badge :offset="[type_badges[model.type].offset,0]" :value="type_badges[model.type].text" type="info">
+  <el-badge :offset="[type_badges[model?.type ?? 0].offset,0]" :value="type_badges[model?.type ?? 0].text" type="info">
     <el-card shadow="always">
       <template #header>
-        {{ model.title }} - {{ modelVersion }}
+        {{ model?.title ?? 'invalid model' }} - {{ modelVersion }}
       </template>
-      <span :class="model.words?'':'hide'">
-        <span v-if="model.words">{{ model.words }}</span>
-        <el-divider v-if="model.words && model.dewords"/>
-        <span v-if="model.dewords">{{ model.dewords }}</span>
+      <span :class="model?.words?'':'hide'">
+        <span v-if="model?.words">{{ model.words }}</span>
+        <el-divider v-if="model?.words && model?.dewords"/>
+        <span v-if="model?.dewords">{{ model.dewords }}</span>
       </span>
       <template v-if="!props.hideFooter" #footer>
-        <el-button :icon="CopyDocument" type="primary" @click="writeText(model.words)"/>
+        <el-button :icon="CopyDocument" type="primary" @click="writeText(model?.words)"/>
         <slot/>
       </template>
     </el-card>

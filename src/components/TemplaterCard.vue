@@ -11,7 +11,7 @@ import {
   Refresh,
   View
 } from "@element-plus/icons-vue"
-import {computed, getCurrentInstance, inject, nextTick, PropType, ref, useTemplateRef} from "vue";
+import {computed, getCurrentInstance, inject, nextTick, PropType, Ref, ref, useTemplateRef} from "vue";
 import {db} from "../database";
 import {Templater} from "../types/templater.ts";
 import {ElMessage, ElMessageBox, ElSelect} from 'element-plus'
@@ -35,7 +35,7 @@ const props = defineProps({
   }
 })
 
-const models = inject<Model[]>('models')
+const models = inject<Ref<Model[]>>('models')
 
 const versions = computed(() => props.templater.versions.map(v => v.title))
 
@@ -218,12 +218,12 @@ const replaceModel = ref({
   },
   startL: (fun: (v) => {}) => {
     replaceModel.value.fun = fun
-    replaceModel.value.models = models.filter(v => v.type == 1)
+    replaceModel.value.models = models.value.filter(v => v?.type == 1)
     replaceModel.value.start()
   },
   startE: (fun: (v) => {}) => {
     replaceModel.value.fun = fun
-    replaceModel.value.models = models.filter(v => v.type == 2)
+    replaceModel.value.models = models.value.filter(v => v?.type == 2)
     replaceModel.value.start()
   },
   finish: () => {
@@ -935,13 +935,13 @@ const whatIsMyHeight = (size: string, height: number) => {
       <el-row>
         <el-checkbox v-model="showVersion.version.sdxl_refiner" disabled label="SDXL Refiner"/>
       </el-row>
-      <el-row v-for="templter in showVersion.version.lora_models">
+      <el-row v-for="templater in showVersion.version.lora_models">
         <el-card class="model">
           <template #header>
-            <el-text type="info">{{ models.find(v => v.uuid === templter.uuid)?.title }} - {{ templter.version }}
+            <el-text type="info">{{ models.find(v => v.uuid === templater.uuid)?.title }} - {{ templater.version }}
             </el-text>
           </template>
-          <el-slider v-model="templter.weight" :max="2" :min="-2" :step="0.1" disabled show-input/>
+          <el-slider v-model="templater.weight" :max="2" :min="-2" :step="0.1" disabled show-input/>
         </el-card>
       </el-row>
       <el-row v-for="templter in showVersion.version.embedding_models">
