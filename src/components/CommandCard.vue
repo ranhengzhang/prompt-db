@@ -7,8 +7,9 @@ import ColoredImage from "./ColoredImage.vue";
 import {Version} from "../types/version.ts";
 
 const emit = defineEmits<{
-  addImg: [uuid: string],
-  delImg: [prompt: Version | Command, index: number]
+  addImg: [uuid: string, index: number],
+  delImg: [uuid: string, index: number],
+  pushImg: [uuid: string, index: number]
 }>()
 
 const props = defineProps({
@@ -45,12 +46,10 @@ const hover = ref({
 const deleteImg = async () => {
   const index = carousel.value.activeIndex
   if (props.promptObject.imgs.length > 1) {
-    if (index == props.promptObject.imgs.length - 1)
+    if (index == props.promptObject.imgs.length - 1) // 最后一个元素
       carousel.value.setActiveItem(index - 1)
-    else
-      carousel.value.setActiveItem(index + 1)
   }
-  emit('delImg', props.promptObject, index)
+  emit('delImg', props.promptObject.uuid, index)
 }
 
 const carousel = ref()
@@ -71,13 +70,14 @@ const imageComponents = new Map()
       </el-carousel-item>
       <el-carousel-item v-if="promptObject.imgs.length === 0"
                         style="display: flex; justify-content: center; align-items: center;"
-                        @click="emit('addImg', promptObject.uuid)">
+                        @click="emit('addImg', promptObject.uuid, carousel.activeIndex)">
         <el-icon>
           <Plus/>
         </el-icon>
       </el-carousel-item>
       <el-col v-else>
-        <el-button :icon="Plus" class="add-img" type="primary" @click="emit('addImg', promptObject.uuid)"/>
+        <el-button :icon="Plus" class="push-img" type="primary" @click="emit('pushImg', promptObject.uuid, carousel.activeIndex)"/>
+        <el-button :icon="Plus" class="add-img" type="primary" @click="emit('addImg', promptObject.uuid, carousel.activeIndex)"/>
         <el-button :icon="Delete"
                    class="del-img"
                    type="danger"
@@ -123,12 +123,25 @@ const imageComponents = new Map()
 
 .add-img {
   position: absolute;
+  right: 0;
+  top: 0;
+  border-radius: 5px 0 5px 100%;
+}
+
+.add-img > :deep(i) {
+  position: absolute;
+  right: 20.7%;
+  top: 20.7%;
+}
+
+.push-img {
+  position: absolute;
   left: 0;
   top: 0;
   border-radius: 0 5px 100% 5px;
 }
 
-.add-img > :deep(i) {
+.push-img > :deep(i) {
   position: absolute;
   left: 20.7%;
   top: 20.7%;
@@ -137,14 +150,15 @@ const imageComponents = new Map()
 .del-img {
   position: absolute;
   right: 0;
-  top: 0;
-  border-radius: 5px 0 5px 100%;
+  bottom: 0;
+  border-radius: 100% 5px 0 5px;
+  z-index: 99;
 }
 
 .del-img > :deep(i) {
   position: absolute;
   right: 20.7%;
-  top: 20.7%;
+  bottom: 20.7%;
 }
 
 .el-card > :deep(.el-card__footer) {

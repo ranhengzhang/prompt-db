@@ -238,7 +238,7 @@ const copyVersion = async () => {
   let {uuid: _uuid, date: _date, imgs: _imgs, ...changes} = value
   changes.title = `${value.title}_副本_${new Date(newValue.date).toLocaleDateString()}`
   Object.assign(newValue, changes)
-  props.templater.versions.push(newValue)
+  props.templater.versions.splice(currentIndex.value+1, 0, newValue)
   await updateTemplater()
 }
 
@@ -266,7 +266,7 @@ const showVersion = ref({
   }
 })
 
-const addImg = async (version_uuid: string) => {
+const addImg = async (version_uuid: string, index: number) => {
   try {
     const files: string[] = await open({
       multiple: true,
@@ -289,7 +289,38 @@ const addImg = async (version_uuid: string) => {
         ElMessage('图片已存在：' + normalized);
         continue;
       }
-      version.imgs.push(normalized)
+      version.imgs.splice(++index, 0, normalized)
+    }
+    props.templater.versions[currentIndex.value] = version
+    await db.templaters.update(props.templater.uuid, JSON.parse(JSON.stringify(props.templater)))
+  } catch (error) {
+    ElMessage('图片添加失败:' + error);
+  }
+}
+const pushImg = async (version_uuid: string, index: number) => {
+  try {
+    const files: string[] = await open({
+      multiple: true,
+      filters: [{
+        name: '图片', extensions: [
+          'jpg', 'jpeg', 'png', 'webp', 'bmp'
+        ]
+      }]
+    });
+    if (!files || files.length === 0) return;
+    let version = props.templater.versions.find(v => v.uuid == version_uuid)
+    for (const file of files) {
+      let normalized: string
+      if (platform() !== "android" && platform() !== "ios") {
+        normalized = (await path.normalize(file)).replace(/\\/gi, "/");
+      } else {
+        normalized = file
+      }
+      if (version.imgs.includes(normalized)) {
+        ElMessage('图片已存在：' + normalized);
+        continue;
+      }
+      version.imgs.splice(index++, 0, normalized)
     }
     props.templater.versions[currentIndex.value] = version
     await db.templaters.update(props.templater.uuid, JSON.parse(JSON.stringify(props.templater)))
@@ -298,7 +329,8 @@ const addImg = async (version_uuid: string) => {
   }
 }
 
-const delImg = async (version: Version, index: number) => {
+const delImg = async (version_uuid: string, index: number) => {
+  const version = props.templater.versions.find(v => v.uuid == version_uuid)
   version.imgs.splice(index, 1)
   props.templater.versions[currentIndex.value] = version
   await db.templaters.update(props.templater.uuid, JSON.parse(JSON.stringify(props.templater)))
@@ -333,7 +365,7 @@ const whatIsMyHeight = (size: string, height: number) => {
 
 <template>
   <command-card :nsfw="nsfwStore.enable" :prompt-object="templater.versions[currentIndex] || new Version('cnmyyx')" :rate="nsfwStore.rate"
-                @add-img="addImg" @del-img="delImg">
+                @add-img="addImg" @del-img="delImg" @push-img="pushImg">
     <template #header>
       <div class="card-header">
           <span>

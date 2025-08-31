@@ -126,7 +126,7 @@ const showCommand = ref({
   }
 })
 
-const addImg = async (command_uuid: string) => {
+const addImg = async (command_uuid: string, index: number) => {
   try {
     const files: string[] = await open({
       multiple: true,
@@ -149,7 +149,7 @@ const addImg = async (command_uuid: string) => {
         ElMessage('图片已存在：' + normalized);
         continue;
       }
-      command.imgs.push(normalized)
+      command.imgs.splice(++index, 0, normalized)
     }
     await db.commands.update(command.uuid, JSON.parse(JSON.stringify(command)))
   } catch (error) {
@@ -157,9 +157,41 @@ const addImg = async (command_uuid: string) => {
   }
 }
 
-const delImg = async (command: Command, index: number) => {
+const pushImg = async (command_uuid: string, index: number) => {
+  try {
+    const files: string[] = await open({
+      multiple: true,
+      filters: [{
+        name: '图片', extensions: [
+          'jpg', 'jpeg', 'png', 'webp', 'bmp'
+        ]
+      }]
+    });
+    if (!files || files.length === 0) return;
+    let command = commands.value.find(v => v.uuid == command_uuid)
+    for (const file of files) {
+      let normalized: string
+      if (platform() !== "android" && platform() !== "ios") {
+        normalized = (await path.normalize(file)).replace(/\\/gi, "/");
+      } else {
+        normalized = file
+      }
+      if (command.imgs.includes(normalized)) {
+        ElMessage('图片已存在：' + normalized);
+        continue;
+      }
+      command.imgs.splice(index++, 0, normalized)
+    }
+    await db.commands.update(command.uuid, JSON.parse(JSON.stringify(command)))
+  } catch (error) {
+    ElMessage('图片添加失败:' + error);
+  }
+}
+
+const delImg = async (command_uuid: string, index: number) => {
+  const command = commands.value.find(v=>v.uuid==command_uuid)
   command.imgs.splice(index, 1)
-  await db.commands.update(command.uuid, JSON.parse(JSON.stringify(command)))
+  await db.commands.update(command_uuid, JSON.parse(JSON.stringify(command)))
 }
 
 onMounted(() => {
@@ -194,7 +226,7 @@ onUnmounted(() => {
   <el-main class="main">
     <command-card v-for="command in pageCommands" :key="command.uuid"
                   :nsfw="nsfwStore.enable" :prompt-object="command" :rate="nsfwStore.rate"
-                  @add-img="addImg" @del-img="delImg">
+                  @add-img="addImg" @del-img="delImg" @push-img="pushImg">
       <template #header>
         <div class="card-header">
           <span>
