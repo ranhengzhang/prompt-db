@@ -31,6 +31,12 @@ jobs:
           node-version: lts/*
           cache: 'pnpm' # change this to npm, pnpm or yarn depending on which one you use.
 
+      - name: cache
+        uses: actions/cache@v4
+        with:
+          key: prompt-db-${{ matrix.platform }}
+          path: src-tauri/target
+
       - name: install pnpm
         run: pnpm i # change this to npm, pnpm or yarn depending on which one you use.
 
