@@ -1026,18 +1026,6 @@ const whatIsMyHeight = (size: string, height: number) => {
         </el-col>
       </el-row>
       <template v-if="showVersion.version.senior">
-        <el-row>
-          <el-text tag="b">采样算法(Sampler)</el-text>
-        </el-row>
-        <el-row>
-          <el-col>
-            <el-text type="info">
-              {{ showVersion.version.algorithm }}
-            </el-text>
-          </el-col>
-        </el-row>
-      </template>
-      <template v-else>
         <el-row :gutter="16">
           <el-col :span="12">
             <el-text tag="b">采样器</el-text>
@@ -1059,6 +1047,18 @@ const whatIsMyHeight = (size: string, height: number) => {
           </el-col>
         </el-row>
       </template>
+      <template v-else>
+        <el-row>
+          <el-text tag="b">采样算法(Sampler)</el-text>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-text type="info">
+              {{ showVersion.version.algorithm }}
+            </el-text>
+          </el-col>
+        </el-row>
+      </template>
       <el-row :gutter="16">
         <el-col :span="12">
           <el-text tag="b">采样次数</el-text>
@@ -1070,12 +1070,12 @@ const whatIsMyHeight = (size: string, height: number) => {
       <el-row :gutter="16">
         <el-col :span="12">
           <el-text type="info">
-            {{ showVersion.version.sampler }}
+            {{ showVersion.version.times }}
           </el-text>
         </el-col>
         <el-col :span="12">
           <el-text type="info">
-            {{ showVersion.version.scheduler }}
+            {{ showVersion.version.relevance }}
           </el-text>
         </el-col>
       </el-row>
