@@ -488,7 +488,7 @@ const whatIsMyHeight = (size: string, height: number) => {
             <el-button :icon="Refresh" type="success"
                        @click="replaceModel.startL((v)=>editeVersion.version.lora_models[index]=v)"/>
             <el-button :icon="Delete" type="danger" @click="editeVersion.version.lora_models.splice(index,1)"/>
-            <el-slider v-model="model.weight" :max="2" :min="-2" :step="0.1" show-input show-stops/>
+            <el-slider v-model="model.weight" :max="2" :min="-2" :step="0.01" show-input/>
           </model-card>
           <model-card v-for="(model, index) in editeVersion.version.embedding_models" :key="model.uuid"
                       :model-uuid="model.uuid" :model-version="model.version">
@@ -496,7 +496,7 @@ const whatIsMyHeight = (size: string, height: number) => {
                        @click="replaceModel.startE((v)=>editeVersion.version.embedding_models[index]=v)"/>
             <el-button :icon="Delete" type="danger"
                        @click="editeVersion.version.embedding_models.splice(index,1)"/>
-            <el-slider v-model="model.weight" :max="2" :min="-2" :step="0.1" show-input show-stops/>
+            <el-slider v-model="model.weight" :max="2" :min="-2" :step="0.01" show-input/>
           </model-card>
         </el-row>
         <el-row :gutter="32">
@@ -794,7 +794,7 @@ const whatIsMyHeight = (size: string, height: number) => {
               <el-button :icon="Refresh" type="success"
                          @click="replaceModel.startL((v)=>editeVersion.version.adetailer_lora[index]=v)"/>
               <el-button :icon="Delete" type="danger" @click="editeVersion.version.adetailer_lora.splice(index,1)"/>
-              <el-slider v-model="lora.weight" :max="2" :min="-2" :step="0.1" show-input show-stops/>
+              <el-slider v-model="lora.weight" :max="2" :min="-2" :step="0.01" show-input/>
             </model-card>
             <el-button v-if="editeVersion.version.adetailer_lora?.length < 2" type="primary"
                        @click="addAdetailer.start">添加 LoRA(风格)

@@ -395,7 +395,7 @@ onUnmounted(() => {
           <template #header>
             {{ models.find(v => v.uuid === templter.uuid)?.title }} - {{ templter.version }}
           </template>
-          <el-slider v-model="templter.weight" :max="2" :min="-2" :step="0.1" disabled show-input/>
+          <el-slider v-model="templter.weight" :max="2" :min="-2" :step="0.01" disabled show-input/>
         </el-card>
       </el-row>
       <el-row>
