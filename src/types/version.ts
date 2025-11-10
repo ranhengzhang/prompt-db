@@ -32,7 +32,7 @@ export class Version extends Entity {
     adetailer_lora: { uuid: string, version: string, weight: number }[] = []
     adetailer_words: string = ""
     adetailer_dewords: string = ""
-    use_adetailer_steps: boolean = false
+    use_adetailer_steps: boolean = true
     adetailer_steps: number = 25
     confidence: number = 0.5
     mask_blur: number = 4

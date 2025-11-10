@@ -26,6 +26,7 @@ import {writeText} from "@tauri-apps/plugin-clipboard-manager";
 import {Version} from "../types/version.ts";
 import {Model} from "../types/model.ts";
 import {convertFileSrc} from "@tauri-apps/api/core";
+import ModelSlider from "./ModelSlider.vue";
 
 const nsfwStore = useNSFWStore()
 
@@ -488,7 +489,7 @@ const whatIsMyHeight = (size: string, height: number) => {
             <el-button :icon="Refresh" type="success"
                        @click="replaceModel.startL((v)=>editeVersion.version.lora_models[index]=v)"/>
             <el-button :icon="Delete" type="danger" @click="editeVersion.version.lora_models.splice(index,1)"/>
-            <el-slider v-model="model.weight" :max="2" :min="-2" :step="0.01" show-input/>
+            <model-slider v-model="model.weight"/>
           </model-card>
           <model-card v-for="(model, index) in editeVersion.version.embedding_models" :key="model.uuid"
                       :model-uuid="model.uuid" :model-version="model.version">
@@ -496,7 +497,7 @@ const whatIsMyHeight = (size: string, height: number) => {
                        @click="replaceModel.startE((v)=>editeVersion.version.embedding_models[index]=v)"/>
             <el-button :icon="Delete" type="danger"
                        @click="editeVersion.version.embedding_models.splice(index,1)"/>
-            <el-slider v-model="model.weight" :max="2" :min="-2" :step="0.01" show-input/>
+            <model-slider v-model="model.weight"/>
           </model-card>
         </el-row>
         <el-row :gutter="32">
@@ -531,7 +532,7 @@ const whatIsMyHeight = (size: string, height: number) => {
         </el-radio-group>
         <el-col v-if="editeVersion.version.size === 'custom'">
           <el-row :gutter="32">
-            <el-col :span="12">
+            <el-col :span="11">
               <el-text size="large">宽</el-text>
             </el-col>
             <el-col :span="12">
@@ -539,6 +540,9 @@ const whatIsMyHeight = (size: string, height: number) => {
             </el-col>
           </el-row>
           <el-row :gutter="32">
+            <el-col style="position: absolute; left:50%; transform: translate(-50%, 0%);">
+              <el-button @click="[editeVersion.version.width, editeVersion.version.height] = [editeVersion.version.height, editeVersion.version.width]" text circle :icon="Refresh"/>
+            </el-col>
             <el-col :span="12">
               <el-slider v-model="editeVersion.version.width" :max="5060" :min="128" show-input/>
             </el-col>
@@ -794,7 +798,7 @@ const whatIsMyHeight = (size: string, height: number) => {
               <el-button :icon="Refresh" type="success"
                          @click="replaceModel.startL((v)=>editeVersion.version.adetailer_lora[index]=v)"/>
               <el-button :icon="Delete" type="danger" @click="editeVersion.version.adetailer_lora.splice(index,1)"/>
-              <el-slider v-model="lora.weight" :max="2" :min="-2" :step="0.01" show-input/>
+              <model-slider v-model="lora.weight"/>
             </model-card>
             <el-button v-if="editeVersion.version.adetailer_lora?.length < 2" type="primary"
                        @click="addAdetailer.start">添加 LoRA(风格)
@@ -1288,6 +1292,7 @@ const whatIsMyHeight = (size: string, height: number) => {
   display: flex;
   align-items: center;
   gap: 4px;
+  flex-wrap: wrap;
 }
 
 .version-control.el-button {

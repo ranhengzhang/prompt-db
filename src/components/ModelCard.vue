@@ -4,6 +4,7 @@ import {db} from "../database";
 import {Model} from "../types/model.ts";
 import {CopyDocument} from "@element-plus/icons-vue";
 import {writeText} from '@tauri-apps/plugin-clipboard-manager';
+import {processTemplatesPlain} from "../utils.ts";
 
 const props = defineProps({
   modelUuid: {
@@ -33,9 +34,15 @@ const type_badges = [
         {{ model?.title ?? 'invalid model' }} - {{ modelVersion }}
       </template>
       <span :class="model?.words?'':'hide'">
-        <span v-if="model?.words">{{ model.words }}</span>
+        <span v-if="model?.words">
+          <el-button type="primary" @click="writeText(processTemplatesPlain(model.words))" text circle :icon="CopyDocument"/>
+          <el-text type="primary" v-html="processTemplatesPlain(model.words)"/>
+        </span>
         <el-divider v-if="model?.words && model?.dewords"/>
-        <span v-if="model?.dewords">{{ model.dewords }}</span>
+        <span v-if="model?.dewords">
+          <el-button type="info" @click="writeText(processTemplatesPlain(model.dewords))" text circle :icon="CopyDocument"/>
+          <el-text type="info" v-html="processTemplatesPlain(model.dewords)"/>
+        </span>
       </span>
       <template v-if="!props.hideFooter" #footer>
         <el-button :icon="CopyDocument" type="primary" @click="writeText(model?.words)"/>

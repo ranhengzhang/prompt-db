@@ -15,6 +15,7 @@ import emitter from "../mitt.ts";
 import ModelCard from "../components/ModelCard.vue";
 import {Model} from "../types/model.ts";
 import {writeText} from "@tauri-apps/plugin-clipboard-manager";
+import ModelSlider from "../components/ModelSlider.vue";
 
 const nsfwStore = useNSFWStore()
 const recentPage = ref(1)
@@ -82,7 +83,7 @@ const addAdetailer = ref({
   },
   finish: () => {
     if (!editeCommand.value.command.adetailer_lora.find(v => v.uuid == addAdetailer.value.model.uuid))
-      editeCommand.value.command.adetailer_lora.push({...addAdetailer.value.model, weight: 0})
+      editeCommand.value.command.adetailer_lora.push({...addAdetailer.value.model, weight: 0.8})
     addAdetailer.value.show = false
   }
 })
@@ -320,6 +321,7 @@ onUnmounted(() => {
             <model-card v-for="(lora, index) in editeCommand.command.adetailer_lora" :key="lora.uuid"
                         :model-uuid="lora.uuid" :model-version="lora.version">
               <el-button :icon="Delete" type="danger" @click="editeCommand.command.adetailer_lora.splice(index,1)"/>
+              <model-slider v-model="lora.weight"/>
             </model-card>
             <el-button type="primary" @click="addAdetailer.start">添加 LoRA(风格)</el-button>
           </el-col>
@@ -432,6 +434,10 @@ onUnmounted(() => {
 }
 
 .model {
+  width: 100%;
+}
+
+.models > * {
   width: 100%;
 }
 </style>

@@ -194,6 +194,10 @@ html, body, #app, .el-container {
   gap: 20px; /* 设置列间距 */
 }
 
+main.main {
+  padding: var(--el-main-padding) 0;
+}
+
 .main > .el-card {
   width: 100%;
   break-inside: avoid; /* 防止元素被截断分列显示 */
@@ -217,5 +221,11 @@ html, body, #app, .el-container {
 <style>
 div[role="dialog"]::-webkit-scrollbar {
   display: none;
+}
+</style>
+
+<style scoped>
+.el-scrollbar {
+  overflow: visible;
 }
 </style>

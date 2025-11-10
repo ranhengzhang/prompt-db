@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {onMounted, onUnmounted, ref, Ref} from "vue";
+import {computed, onMounted, onUnmounted, ref, Ref} from "vue";
 import {liveQuery, Subscription} from "dexie";
 import {db} from "../database";
 import {Model} from "../types/model.ts";
@@ -9,6 +9,9 @@ import {handleClose, processTemplates} from "../utils.ts";
 
 const models: Ref<Model[]> = ref([])
 let models_subscription: Subscription | null = null
+
+const filters = ref([])
+const filted = computed(()=>models.value.filter(val=>filters.value.filter(v=>JSON.stringify(val).indexOf(v)===-1).length === 0))
 
 const type_badges = [
   {text: "B", color: "Salmon"},
@@ -53,7 +56,6 @@ const editeModel = ref({
   },
   finish: async () => {
     const value = JSON.parse(JSON.stringify(editeModel.value.model));
-    console.log(await db.models.update(value.uuid, value))
     editeModel.value.show = false
   }
 })
@@ -89,8 +91,9 @@ onUnmounted(() => {
 
 <template>
   <el-button type="danger" @click="newModel">ADD</el-button>
+  <el-input-tag v-model="filters" @change="filters" size="large" tag-type="primary" tag-effect="dark" style="margin-top: 10px;"/>
   <el-main class="main">
-    <el-badge v-for="model in models" :key="model.uuid" :color="type_badges[model.type].color" :offset="[-2,2]"
+    <el-badge v-for="model in filted" :key="model.uuid" :color="type_badges[model.type].color" :offset="[-2,2]"
               :value="type_badges[model.type].text" class="card"
               @dblclick="updateModel(model.uuid, {type: (model.type+1)%3})">
       <el-card>
@@ -196,5 +199,9 @@ onUnmounted(() => {
   width: 100%;
   break-inside: avoid; /* 防止元素被截断分列显示 */
   margin-bottom: 10px; /* 保留元素间距 */
+}
+
+:deep(.el-badge__content.is-fixed) {
+  line-height: 0;
 }
 </style>

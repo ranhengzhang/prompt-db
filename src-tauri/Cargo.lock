@@ -3265,7 +3265,7 @@ dependencies = [
 
 [[package]]
 name = "prompt-db"
-version = "0.2.2"
+version = "0.3.0"
 dependencies = [
  "image",
  "serde",
@@ -3277,6 +3277,7 @@ dependencies = [
  "tauri-plugin-fs",
  "tauri-plugin-opener",
  "tauri-plugin-os",
+ "tauri-plugin-single-instance",
  "tauri-plugin-window-state",
 ]
 
@@ -4481,6 +4482,21 @@ dependencies = [
  "tauri",
  "tauri-plugin",
  "thiserror 2.0.12",
+]
+
+[[package]]
+name = "tauri-plugin-single-instance"
+version = "2.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "50a0e5a4ce43cb3a733c3aef85e8478bc769dac743c615e26639cbf5d953faf7"
+dependencies = [
+ "serde",
+ "serde_json",
+ "tauri",
+ "thiserror 2.0.12",
+ "tracing",
+ "windows-sys 0.60.2",
+ "zbus",
 ]
 
 [[package]]
