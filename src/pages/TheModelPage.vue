@@ -56,6 +56,7 @@ const editeModel = ref({
   },
   finish: async () => {
     const value = JSON.parse(JSON.stringify(editeModel.value.model));
+    await db.models.update(value.uuid, value)
     editeModel.value.show = false
   }
 })
