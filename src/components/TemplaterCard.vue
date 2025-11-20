@@ -11,7 +11,7 @@ import {
   Refresh,
   View
 } from "@element-plus/icons-vue"
-import {computed, getCurrentInstance, inject, nextTick, PropType, Ref, ref, useTemplateRef} from "vue";
+import {computed, getCurrentInstance, inject, nextTick, PropType, Ref, ref, useTemplateRef, useId} from "vue";
 import {db} from "../database";
 import {Templater} from "../types/templater.ts";
 import {ElMessage, ElMessageBox, ElSelect} from 'element-plus'
@@ -386,7 +386,7 @@ const whatIsMyHeight = (size: string, height: number) => {
       <div class="views">
         <el-popover v-for="(tag, index) in versions" :key="tag"
                     :disabled="templater.versions[index].imgs.length === 0 || index===currentIndex" placement="bottom"
-                    trigger="hover">
+                    trigger="hover" :teleported="false">
           <template #reference>
             <el-tag :checked="index===currentIndex"
                     :effect="index===hoverIndex?'dark':index===currentIndex?'light':'plain'"

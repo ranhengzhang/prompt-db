@@ -203,6 +203,14 @@ main.main {
   break-inside: avoid; /* 防止元素被截断分列显示 */
   margin-bottom: 20px; /* 保留元素间距 */
 }
+
+main.el-main {
+  overflow: visible;
+}
+
+main.main.el-main {
+  padding-right: 2px;
+}
 </style>
 
 <style>
@@ -221,6 +229,12 @@ main.main {
 <style>
 div[role="dialog"]::-webkit-scrollbar {
   display: none;
+}
+</style>
+
+<style>
+div[class*="el-scrollbar"] {
+  overflow: visible;
 }
 </style>
 

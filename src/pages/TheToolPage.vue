@@ -20,7 +20,7 @@ const save = async () => {
   await db.commands.bulkPut(datas["commands"])
   await db.models.bulkPut(datas["models"])
 }
-const formatedWords = computed(() => words.value.split('\n').map(v => v.trim()).join('\n').replace(/([,，]\s?)+/gm, ', ').replace(/\n{3,}/gm, '\n\n').replace(/\ {2,}/gm, ' '))
+const formatedWords = computed(() => words.value.split('\n').map(v => v.trim()).join('\n').replace(/([,，]\s?)+/gm, ', ').replace(/\n{3,}/gm, '\n\n').replace(/\ {2,}/gm, ' ').replace(/（(.*?)）/gm, '($1)'))
 </script>
 
 <template>
